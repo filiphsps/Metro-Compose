@@ -37,6 +37,7 @@ import com.louis993546.metro.LocalTextOnBackgroundColor
 import com.louis993546.metro.Text
 import com.louis993546.metro.demo.appRow.AppRow
 import com.louis993546.metro.demo.apps.Apps
+import com.louis993546.metro.forceTapAnimation
 
 @ExperimentalFoundationApi
 @Composable
@@ -103,31 +104,21 @@ fun SearchButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val pressed by interactionSource.collectIsPressedAsState()
     CircleButton(
-        pressed = pressed,
         modifier = modifier
             .size(48.dp)
             .padding(4.dp)
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null, // TODO Metro indication
-                onClick = onClick
-            )
     ) {
         Image(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp)
-                .scale(scaleX = -1f, scaleY = 1f),
+                .scale(scaleX = -1f, scaleY = 1f)
+                .clickable { onClick() },
             painter = painterResource(id = R.drawable.ic_baseline_search_24),
             contentDescription = "Search",
             colorFilter = ColorFilter.tint(
-                if(pressed)
-                    LocalBackgroundColor.current
-                else
-                    LocalTextOnBackgroundColor.current
+                LocalTextOnBackgroundColor.current
             ),
         )
     }
@@ -140,6 +131,7 @@ fun Header(
 ) {
     Box(
         modifier = modifier
+            .forceTapAnimation()
             .background(color = LocalBackgroundColor.current)
             .height(62.dp)
     ) {
