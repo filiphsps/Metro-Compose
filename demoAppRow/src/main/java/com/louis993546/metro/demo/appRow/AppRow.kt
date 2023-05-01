@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.louis993546.metro.LocalAccentColor
 import com.louis993546.metro.Text
+import com.louis993546.metro.forceTapAnimation
 
 @Composable
 fun AppIcon(
@@ -34,7 +35,11 @@ fun AppRow(
     appName: String,
     appIcon: Drawable?,
 ) {
-    Row(modifier = modifier) {
+    Row(
+        modifier = modifier
+            .forceTapAnimation(2.5f)
+            .fillMaxSize()
+    ) {
         AppIcon {
             when (appIcon) {
                 null -> Box(

@@ -11,7 +11,9 @@ public final class com/louis993546/metro/BuildConfig {
 }
 
 public final class com/louis993546/metro/ButtonsKt {
+	public static final fun Button (Landroidx/compose/ui/Modifier;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
 	public static final fun CircleButton (Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun forceTapAnimation (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 }
 
 public final class com/louis993546/metro/FontFamilyKt {
@@ -61,9 +63,9 @@ public final class com/louis993546/metro/MetroThemeKt {
 	public static final fun getLocalTextOnButtonColor ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 
-public final class com/louis993546/metro/PagesKt {
-	public static final fun Pages (Landroidx/compose/ui/Modifier;Ljava/util/List;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
-	public static final fun TitleBar (Landroidx/compose/ui/Modifier;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
+public final class com/louis993546/metro/PivotKt {
+	public static final fun Pivot (Landroidx/compose/ui/Modifier;Ljava/util/List;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun PivotTitle (Landroidx/compose/ui/Modifier;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/louis993546/metro/TextFieldKt {
@@ -71,7 +73,8 @@ public final class com/louis993546/metro/TextFieldKt {
 }
 
 public final class com/louis993546/metro/TextKt {
-	public static final fun Text-19tTp10 (Landroidx/compose/ui/Modifier;Ljava/lang/String;JJLandroidx/compose/ui/text/font/FontWeight;ILandroidx/compose/runtime/Composer;II)V
+	public static final fun Disclaimer-Cscg79A (Landroidx/compose/ui/Modifier;Ljava/lang/String;JJJLandroidx/compose/ui/text/font/FontWeight;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Text-7et1jq0 (Landroidx/compose/ui/Modifier;Ljava/lang/String;JJJLandroidx/compose/ui/text/font/FontWeight;ILandroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/louis993546/metro/TileKt {

@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,8 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.louis993546.metro.CircleButton
 import com.louis993546.metro.LocalAccentColor
 import com.louis993546.metro.LocalTextOnAccentColor
@@ -25,6 +28,8 @@ import com.louis993546.metro.LocalTextOnBackgroundColor
 import com.louis993546.metro.Text
 import com.louis993546.metro.demo.VerticalTilesGrid
 import com.louis993546.metro.demo.apps.Apps
+import com.louis993546.metro.forceTapAnimation
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Suppress LongMethod, as in long run, this whole thing should be configurable by the users
@@ -44,44 +49,45 @@ fun HomePage(
 //            contentScale = ContentScale.Crop,
 //        )
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
-        val padding = 8.dp
         VerticalTilesGrid(
-            modifier = Modifier.fillMaxSize(),
-            gap = padding,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 8.dp)
+                .padding(horizontal = 12.dp),
+            gap = 12.dp,
         ) {
             s {
                 HomeTile(
                     title = "Calculator",
                     iconRes = R.drawable.ic_baseline_calculate_24,
-                    modifier = Modifier.clickable { onAppClick(Apps.CALCULATOR) }
+                    activate = { onAppClick(Apps.CALCULATOR) }
                 )
             }
             s {
                 HomeTile(
                     title = "FM Radio",
                     iconRes = R.drawable.ic_baseline_radio_24,
-                    modifier = Modifier.clickable { TODO() }
                 )
             }
             m {
                 HomeTile(
                     title = "Browser",
                     iconRes = R.drawable.outline_public_24,
-                    modifier = Modifier.clickable { onAppClick(Apps.BROWSER) }
+                    activate = { onAppClick(Apps.BROWSER) }
                 )
             }
             s {
                 HomeTile(
                     title = "Camera",
                     iconRes = R.drawable.ic_baseline_photo_camera_24,
-                    modifier = Modifier.clickable { onAppClick(Apps.CAMERA) }
+                    activate = { onAppClick(Apps.CAMERA) }
                 )
             }
             s {
                 HomeTile(
                     title = "Calendar",
                     iconRes = R.drawable.ic_baseline_calculate_24,
-                    modifier = Modifier.clickable { onAppClick(Apps.CALENDAR) }
+                    activate = { onAppClick(Apps.CALENDAR) }
                 )
             }
             l { HomeTile(title = "Photos") }
@@ -89,7 +95,6 @@ fun HomePage(
                 HomeTile(
                     title = "7:00",
                     iconRes = R.drawable.outline_public_24,
-                    modifier = Modifier.clickable { }
                 )
             }
             s {
@@ -101,7 +106,7 @@ fun HomePage(
                 HomeTile(
                     title = "Wordle",
                     iconRes = R.drawable.wordle_icon,
-                    modifier = Modifier.clickable { onAppClick(Apps.WORDLE) }
+                    activate = { onAppClick(Apps.WORDLE) }
                 )
             }
             m {
@@ -119,7 +124,7 @@ fun HomePage(
                 HomeTile(
                     title = "", // Metro Settings
                     iconRes = R.drawable.ic_baseline_settings_24,
-                    modifier = Modifier.clickable { onAppClick(Apps.SETTINGS) },
+                    activate = { onAppClick(Apps.SETTINGS) }
                 )
             }
             l {
@@ -131,22 +136,25 @@ fun HomePage(
                 HomeTile(
                     title = "", // Settings
                     iconRes = R.drawable.ic_baseline_settings_24,
-                    modifier = Modifier.clickable { onAppClick(Apps.METRO_SETTINGS) },
+                    activate = { onAppClick(Apps.METRO_SETTINGS) }
                 )
             }
         }
+
         CircleButton(
             modifier = Modifier
                 .align(Alignment.End)
-                .padding(padding),
+                .padding(8.dp)
         ) {
             Image(
                 modifier = Modifier
-                    .padding(4.dp)
-                    .clickable(onClick = onArrowClick),
+                    .padding(6.dp)
+                    .clickable { onArrowClick() },
                 painter = painterResource(id = R.drawable.ic_baseline_arrow_forward_24),
                 contentDescription = "Apps list",
-                colorFilter = ColorFilter.tint(LocalTextOnBackgroundColor.current),
+                colorFilter = ColorFilter.tint(
+                    LocalTextOnBackgroundColor.current
+                ),
             )
         }
     }
@@ -155,17 +163,37 @@ fun HomePage(
 
 /**
  * Unlike normal Tile, HomeTile can be rectangle, not just square
+ * FIXME We need to know the size of the tile to set the correct
+ *  icon size and whether to show the label or not
  */
 @Composable
 fun HomeTile(
-    modifier: Modifier = Modifier,
     @DrawableRes iconRes: Int? = null,
     title: String = "",
     backgroundColor: Color = LocalAccentColor.current,
-    textColor: Color = LocalTextOnAccentColor.current
+    textColor: Color = LocalTextOnAccentColor.current,
+    activate: (() -> Unit)? = null,
 ) {
     Box(
-        modifier = modifier.background(color = backgroundColor)
+        modifier = Modifier
+            .forceTapAnimation()
+            .background(color = backgroundColor)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = {
+                        //start
+                        @Suppress("SwallowedException")
+                        val released = try {
+                            tryAwaitRelease()
+                        } catch (c: CancellationException) {
+                            false
+                        }
+
+                        if (released && activate != null)
+                            activate()
+                    }
+                )
+            }
     ) {
         iconRes?.let { res ->
             Image(
@@ -181,8 +209,9 @@ fun HomeTile(
         Text(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(start = 6.dp, bottom = 2.dp),
+                .padding(start = 10.dp, bottom = 6.dp),
             text = title,
+            size = 18.sp,
             color = textColor,
         )
     }

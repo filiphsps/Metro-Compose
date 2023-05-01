@@ -4,9 +4,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.louis993546.metro.Pages
+import com.louis993546.metro.Pivot
+import com.louis993546.metro.PivotTitle
 import com.louis993546.metro.Text
-import com.louis993546.metro.TitleBar
 
 @ExperimentalFoundationApi
 @Composable
@@ -14,8 +14,8 @@ fun Settings(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        TitleBar(title = "SETTINGS")
-        Pages(pageTitles = listOf("system", "applications")) { pageNumber ->
+        PivotTitle(title = "Settings")
+        Pivot(pageTitles = listOf("system", "applications")) { pageNumber ->
             when (pageNumber) {
                 0 -> SystemPage()
                 1 -> ApplicationsPage()
