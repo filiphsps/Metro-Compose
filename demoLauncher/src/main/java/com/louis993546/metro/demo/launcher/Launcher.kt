@@ -44,7 +44,10 @@ fun HomePage(
 //            contentDescription = "background",
 //            contentScale = ContentScale.Crop,
 //        )
-    Column(modifier = modifier.verticalScroll(rememberScrollState())) {
+    Column(modifier = modifier
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState())
+    ) {
         VerticalTilesGrid(
             modifier = Modifier
                 .fillMaxSize()
